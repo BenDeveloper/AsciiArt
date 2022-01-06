@@ -2,18 +2,23 @@
 {
     string abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?";
 
-    public List<AsciiLetter> Index { get; set; }
+    public List<AsciiLetter>? Index { get; set; }
 
     public AsciiIndex(string path)
+    {
+        Initialization(path);
+    }
+
+    public List<AsciiLetter> Initialization(string path)
     {
         Index = new List<AsciiLetter>();
 
         // Fill characters into index
         foreach (char c in abc.ToCharArray())
         {
-            Index.Add(new AsciiLetter() 
-            { 
-                Letter = c.ToString(), 
+            Index.Add(new AsciiLetter()
+            {
+                Letter = c.ToString(),
                 AsciiLetterBits = new string[5] { String.Empty, String.Empty, String.Empty, String.Empty, String.Empty }
             });
         }
@@ -34,10 +39,9 @@
                 {
                     s += c.ToString();
 
-                    // 
                     if (letterIndex == 26 && counterLines == 4)
                     {
-                        Index[letterIndex].AsciiLetterBits[counterLines] = s;
+                        Index[letterIndex].AsciiLetterBits[counterLines] = s + " ";
                     }
 
                     if (count4 == 3)
@@ -59,33 +63,68 @@
             letterIndex = 0;
             counterLines++;
         }
+
+        return Index;
     }
 
-    public void ReadString(string s)
+    private AsciiLetter GetLetter(string s)
     {
         if (Index == null)
         {
             throw new ArgumentNullException("Index Null");
         }
 
-        foreach (char c in s.ToCharArray())
+        AsciiLetter l;
+
+        if (Index.Exists(x => x.Letter == s.ToUpper()))
         {
-            AsciiLetter l;
+            l = Index.FirstOrDefault(x => x.Letter == s.ToUpper());
+        }
+        else
+        {
+            l = Index.FirstOrDefault(x => x.Letter == "?");
+        }
 
-            if (Index.Exists(x => x.Letter == c.ToString()))
-            {
-                l = Index.FirstOrDefault(Index => Index.Letter == c.ToString());
-            }
-            else
-            {
-                l = Index.FirstOrDefault(Index => Index.Letter == "?");
-            }
-            
+        return l;
+    }
 
-            foreach (string ch in l.AsciiLetterBits)
+    public void WriteLetter(string s)
+    {
+        AsciiLetter l = GetLetter(s);
+
+        foreach (string ch in l.AsciiLetterBits)
+        {
+            Console.WriteLine(ch);
+        }
+    }
+
+    public void WriteString(string str)
+    {
+        List<string> lineList = new List<string>();
+
+        try
+        {
+            // Make line 1
+            string s = String.Empty;
+            AsciiLetter asciiLetter = new AsciiLetter();
+
+            // For each lines
+            for (int i = 0; i < 5; i++)
             {
-                Console.WriteLine(ch);
+                // get each characters line position
+                foreach (char ch in str)
+                {
+                    asciiLetter = GetLetter(ch.ToString());
+                    s += asciiLetter.AsciiLetterBits[i];
+                }
+
+                Console.WriteLine(s);
+                s = String.Empty;
             }
         }
-    } 
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
 }

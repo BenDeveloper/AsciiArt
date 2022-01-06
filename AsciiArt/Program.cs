@@ -9,15 +9,10 @@ BenTools.ReadFile(path);
 // Set an ASCII Index
 AsciiIndex asciiIndex = new AsciiIndex(path);
 
-//// Check 
-//foreach (AsciiLetter l in asciiIndex.Index)
-//{
-//    Console.WriteLine(l.Letter);
-//}
-
 // Add ASCII bits to definition
-//asciiIndex.ReadLetter("A");
-asciiIndex.ReadString("Ben");
+asciiIndex.WriteLetter("A");
+asciiIndex.WriteString("Ben");
+asciiIndex.WriteString("B&n");
 
 
 Console.ReadLine();
