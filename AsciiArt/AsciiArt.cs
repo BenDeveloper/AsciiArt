@@ -59,10 +59,10 @@ public class AsciiArt
                     charBits += c.ToString();
 
                     // Store last part before end of loop
+                    // To check
                     if (charCount == this.alphabet.Length -1 && i == L)
                     {
                         // Store to Index
-                        // 
                         IndexChars[charCount, i] = charBits + " ";
                     }
 
@@ -88,37 +88,48 @@ public class AsciiArt
         Console.WriteLine("AsciiArt Initialized");
     }
 
+    /// <summary>
+    /// Write a string in ascii art.
+    /// </summary>
+    /// <param name="s"></param>
     public void Write(string s)
     {
-        // Store Chars index
         int[] charIndex = new int[s.ToCharArray().Count()];
         int countChar = 0;
 
+        // Foreach characters in s
         foreach (char c in s.ToCharArray())
         {
             int idx = alphabet.IndexOf(c.ToString().ToUpper());
+
+            // if index does'nt exist
             if (idx == -1)
             {
+                // Use character '?'
                 charIndex[countChar] = this.alphabet.Length-1;
             }
             else
             {
+                // Store letter index
                 charIndex[countChar] = idx;
             }
+            // Increase letter count for storing
             countChar++;
         }
 
-        // Show T
         string line = String.Empty;
         // For each lines
         for (int i = 0; i < H; i++)
         {
-            // Foreach characters
+            // Foreach characters 
             foreach (int c in charIndex)
             {
+                // build line
                 line += IndexChars[c, i];
             }
+            // Write line
             Console.WriteLine(line);
+            // Clear to next line
             line = String.Empty;
         }
     }
